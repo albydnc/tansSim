@@ -25,8 +25,8 @@ double nearAvg(const std::vector<double> &zRecon, const double &zTrend, const do
 double findZ(TClonesArray *L1Hits, TClonesArray *L2Hits, const double &maxTheta, const double &tol, bool debug);
 
 //------------------------RECONSTRUCTION METHOD -------------------------
-int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, const double minTol = 1,
-                   const double minDTheta = 0.1)
+int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, const double minTol = 0.1,
+                   const double minDTheta = 0.01)
 {
    // loading source file
    TFile *sourceFile = new TFile(fileName);
@@ -34,12 +34,12 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    // histogram and canvas declarations
    TCanvas *     cResAll = new TCanvas("cResAll", "Risoluzione", 10, 10, 1200, 800);
    TH1I *        hResAll = new TH1I("hResAll", "Risoluzione inclusva", 200, -20, 20);
-   double        sigmaZ[11], ssigmaZ[11], xZ[11], sxZ[11];
+   double        sigmaZ[13], ssigmaZ[13], xZ[13], sxZ[13];
    TCanvas *     cResVsZtrue = new TCanvas("cResVsZtrue", "Risoluzione vs Z", 10, 10, 1200, 800);
    TGraphErrors *hResVsZtrue;
-   TH1I *        hdZ[11];
-   for (uint8_t i = 0; i < 11; i++) {
-      xZ[i]  = -150 + i * 30;
+   TH1I *        hdZ[13];
+   for (uint8_t i = 0; i < 13; i++) {
+      xZ[i]  = -180 + i * 30;
       hdZ[i] = new TH1I(Form("dZ%u", i), Form("dZ%u", i), 100, -0.5, 0.5);
       sxZ[i] = 15;
    }
@@ -98,7 +98,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
          hHitReconVsMult->Fill(ptc[3]);
          if (ptc[2] < 53 && ptc[2] > -53) hHitReconVsMult1S->Fill(ptc[3]);
          hHitReconVsZ->Fill(ptc[2]);
-         for (uint8_t i = 0; i < 11; i++) {
+         for (uint8_t i = 0; i < 13; i++) {
             if (ptc[2] - xZ[i] < 15 && ptc[2] - xZ[i] > -15) {
                hdZ[i]->Fill(dZ);
                break;
@@ -118,14 +118,14 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    printf("\nNot reconstructed: %d\n", notRecon);
    printf("Elapsed time: %.2f s", watch.CpuTime());
    // draw histograms
-   for (uint8_t i = 0; i < 11; i++) {
+   for (uint8_t i = 0; i < 13; i++) {
       sigmaZ[i]  = hdZ[i]->GetStdDev();
       ssigmaZ[i] = hdZ[i]->GetStdDevError();
    }
    cResVsZtrue->cd();
-   hResVsZtrue = new TGraphErrors(11, xZ, sigmaZ, sxZ, ssigmaZ);
+   hResVsZtrue = new TGraphErrors(13, xZ, sigmaZ, sxZ, ssigmaZ);
    hResVsZtrue->SetTitle("Risoluzione vs Z;Z [cm];Risoluzione [cm]");
-   hResVsZtrue->SetMinimum(0.);
+   hResVsZtrue->SetMinimum(0.1);
    hResVsZtrue->Draw();
 
    for (uint8_t i = 0; i < 14; i++) {
@@ -133,9 +133,9 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
       ssigmaMult[i] = hdMult[i]->GetStdDevError();
    }
    cResVsMult->cd();
-   hResVsMult = new TGraphErrors(14, xMult, sigmaMult, sxMult, ssigmaMult);
+   hResVsMult = new TGraphErrors(13, xMult, sigmaMult, sxMult, ssigmaMult);
    hResVsMult->SetTitle("Risoluzione vs Molteplicita';Molteplicita' ;Risoluzione [cm]");
-   hResVsMult->SetMinimum(0.);
+   hResVsMult->SetMinimum(0.1);
    hResVsMult->Draw();
    cResAll->cd();
    hResAll->Draw();
@@ -197,7 +197,11 @@ double nearAvg(const std::vector<double> &zRecon, const double &zTrend, const do
          zAvg++;
       }
    }
-   return temp / zAvg;
+   if (zAvg > 0) {
+      return temp / zAvg;
+   } else {
+      return -99999.;
+   }
 }
 // finding mode method
 double findMax(TH1I &data, const double &tol)
