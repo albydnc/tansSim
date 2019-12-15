@@ -11,24 +11,31 @@
 #include "TClonesArray.h"
 #include "particle.h"
 
+#define UNIFORM 1
+#define KINEMATIC 2
+#define FIXED 3
+#define GAUSSIAN 4
+
 class collision : public TObject {
 public:
    collision();
    collision(TFile *sourceFile);
-   collision(const collision &source);            // copia oggetto già dichiarato SENZA modificarlo
-   virtual ~collision();                          // distruttore virtuale perché ereditato da TObject
+   collision(const collision &source);
+   virtual ~collision();
    collision &operator=(const collision &source); // assignment operator
-   void       generateVertex();
-   void       generateVertex(double *ptc);
+
+   void generateVertex();            // generates vertex coordinates
+   void generateVertex(double *ptc); // generates vertex coordinates with pointer
    // getters
-   void getCoordinates(double *ptc);
-   void generateParticles(double * ptc, TClonesArray * particles);
+   void getCoordinates(double *ptc); // get generated vertex
+   void generateParticles(double *ptc, TClonesArray *particles,
+                          const uint8_t distType); // generate particles given a vertex and writing to particles array
    // setters
-   void ImportKinem(TString path);
+   void ImportKinem(TString path); // import kinematic file
    ClassDef(collision, 1)
 
-private :
-      // point coordinates
+private:
+   // point coordinates
    double _ptc[4]; //[4]
    // distrib params
    double _mx = 0.;
@@ -41,7 +48,8 @@ private :
    TH1F * _distMult;
    TH1F * _distEta;
    TFile *_kinemFile;
-   void   getDir(particle &dir);
+   // particle direction generator
+   void getDir(particle &dir);
 };
 
 #endif

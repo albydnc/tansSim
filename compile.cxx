@@ -1,3 +1,6 @@
+// @(#)root/simulation
+// Author: Alberto Perro 15/12/19
+
 #include <Riostream.h>
 #include <sys/stat.h>
 #include "TSystem.h"

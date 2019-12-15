@@ -5,7 +5,7 @@ This program is a basic implementation of simulation and recontruction of partic
 
 ### Simulation
 The program simulates a detector made of a beampipe and two cylindrical layers.
-Collision vertexes are generated on a given probability distribution (Gaussian) and particles follow the pseudorapidity and angle distribution from a given kinematic file.
+Collision vertexes and multiplicity are generated on a normal distribution and particles follow the pseudorapidity and angle distribution from a given kinematic file.
 
 ##### Interaction with detector layers
 The interaction with detectors is following a basic linear intesection.

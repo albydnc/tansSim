@@ -1,5 +1,6 @@
 // @(#)root/simulationclass
 // Author: Alberto Perro 15/11/19
+
 #include <Riostream.h>
 #include "detector.h"
 #include "TRandom3.h"
@@ -27,14 +28,14 @@ detector &detector::operator=(const detector &source)
    return *this;
 }
 
-void detector::intersect(double * ptc, TClonesArray * particles,
-                         TClonesArray * Hits, double width, double radius,double z_sm, double rho_sm, int randomNoise)
+void detector::intersect(double *ptc, TClonesArray *particles, TClonesArray *Hits, double width, double radius,
+                         double z_sm, double rho_sm, int randomNoise)
 {
-  uint16_t success = 0;
-  TClonesArray &hits = *Hits;
-  TIter next(particles);
-  particle * part;
-  while((part=(particle*)next())) {
+   uint16_t      success = 0;
+   TClonesArray &hits    = *Hits;
+   TIter         next(particles);
+   particle *    part;
+   while ((part = (particle *)next())) {
       double theta = part->getTheta();
       double phi   = part->getPhi();
       if (theta > TMath::Pi()) theta = theta - TMath::Pi();
@@ -65,33 +66,33 @@ void detector::intersect(double * ptc, TClonesArray * particles,
             rho = (y > 0 ? 1. : -1.) * TMath::Pi() + TMath::ATan(y / x);
          }
          rho_sm /= radius;
-         double z_smear= gRandom->Gaus(z, z_sm);
-			   double rho_smear = gRandom->Gaus(rho, rho_sm); // smearing
-         if (rho_smear<0){
-           rho_smear = rho_smear+ 2*TMath::Pi();
-			   }else if (rho_smear>2*TMath::Pi()){
-			     rho_smear = rho_smear - 2*TMath::Pi();
+         double z_smear   = gRandom->Gaus(z, z_sm);
+         double rho_smear = gRandom->Gaus(rho, rho_sm); // smearing
+         if (rho_smear < 0) {
+            rho_smear = rho_smear + 2 * TMath::Pi();
+         } else if (rho_smear > 2 * TMath::Pi()) {
+            rho_smear = rho_smear - 2 * TMath::Pi();
          }
-         new(hits[success])hit(rho_smear,z_smear);
-         //new(hits[success])hit(rho,z);
+         new (hits[success]) hit(rho_smear, z_smear);
+         // new(hits[success])hit(rho,z);
          success++;
-      }else{
-        particles->Remove(part);
+      } else {
+         particles->Remove(part);
       }
    }
-   if(randomNoise>0){
-     for(int i = 0; i < randomNoise; i++){
-       double z = width-(gRandom->Rndm()*width/2);
-       double rho = 2*TMath::Pi()*gRandom->Rndm();
-     }
+   if (randomNoise > 0) {
+      for (int i = 0; i < randomNoise; i++) {
+         double z   = width - (gRandom->Rndm() * width / 2);
+         double rho = 2 * TMath::Pi() * gRandom->Rndm();
+      }
    }
 }
 
-void detector::multipleScattering(TClonesArray * particles, double rmsTh)
+void detector::multipleScattering(TClonesArray *particles, double rmsTh)
 {
-  TIter next(particles);
-  particle * part;
-  while((part=(particle*)next())) {
+   TIter     next(particles);
+   particle *part;
+   while ((part = (particle *)next())) {
       double theta = part->getTheta();
       double phi   = part->getPhi();
 

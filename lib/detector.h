@@ -1,5 +1,6 @@
 // @(#)root/simulationclass
 // Author: Alberto Perro 15/11/19
+
 #ifndef DETECTOR_H
 #define DETECTOR_H
 
@@ -14,15 +15,17 @@
 class detector : public TObject {
 public:
    detector();
-   detector(const detector &source);            // copia oggetto già dichiarato SENZA modificarlo
-   virtual ~detector();                         // distruttore virtuale perché ereditato da TObject
+   detector(const detector &source);
+   virtual ~detector();
    detector &operator=(const detector &source); // assignment operator
-   void intersect(double *ptc,TClonesArray * particles, TClonesArray * Hits,
-                  double width, double radius, double z_sm, double rho_sm, int randomNoise);
-   void multipleScattering(TClonesArray * particles, double rmsTh);
+
+   // intersecting layer of detector given parameters
+   void intersect(double *ptc, TClonesArray *particles, TClonesArray *Hits, double width, double radius, double z_sm,
+                  double rho_sm, int randomNoise);
+   // multiple scattering generator
+   void multipleScattering(TClonesArray *particles, double rmsTh);
 
    ClassDef(detector, 0)
- private:
 };
 
 #endif

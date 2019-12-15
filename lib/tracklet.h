@@ -10,14 +10,15 @@
 class tracklet : public TObject {
 public:
    tracklet();
-   tracklet(const hit& hitL1, const hit& hitL2);
-	 tracklet(const hit* const phitL1, const hit* const phitL2);
-   virtual ~tracklet();                          // distruttore virtuale perché ereditato da TObject
+   tracklet(const hit &hitL1, const hit &hitL2, const double l1rad, const double l2rad);
+   tracklet(const hit *const phitL1, const hit *const phitL2, const double l1rad, const double l2rad);
+   virtual ~tracklet();
    tracklet &operator=(const tracklet &source); // assignment operator
-   double findZVertex();
-   ClassDef(tracklet,1)
+   //vertex finder
+   double    findZVertex();
+   ClassDef(tracklet, 1)
 private:
-  hit _L1,_L2;
-  double _l1R = 40.0, _l2R = 70.0;
+   hit _L1, _L2;
+   double _l1R = 40.0, _l2R = 70.0;
 };
 #endif

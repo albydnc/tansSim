@@ -1,11 +1,13 @@
 // @(#)root/simulationclass
 // Author: Alberto Perro 15/11/19
+
 #include <Riostream.h>
 #include "particle.h"
 
 ClassImp(particle)
 
-   particle::particle(): TObject()
+   particle::particle()
+   : TObject()
 {
 }
 particle::particle(double theta, double phi) : TObject(), _theta(theta), _phi(phi) {}
@@ -32,7 +34,7 @@ double particle::getPhi()
 }
 void particle::setTheta(double theta)
 {
-  _theta = theta;
+   _theta = theta;
 }
 
 void particle::setPhi(double phi)

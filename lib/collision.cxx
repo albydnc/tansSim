@@ -1,13 +1,14 @@
 // @(#)root/simulationclass
 // Author: Alberto Perro 15/11/19
+
 #include <Riostream.h>
 #include "collision.h"
 #include "TRandom3.h"
 #include "TMath.h"
 #include "TString.h"
-
 #include "hit.h"
 #include "particle.h"
+
 ClassImp(collision)
 
    collision::collision()
@@ -63,22 +64,28 @@ void collision::generateVertex(double *ptc)
 // getters
 void collision::getCoordinates(double *ptc)
 {
-  ptc[0] = _ptc[0];
-  ptc[1] = _ptc[1];
-  ptc[2] = _ptc[2];
-  ptc[3] = _ptc[3];
+   ptc[0] = _ptc[0];
+   ptc[1] = _ptc[1];
+   ptc[2] = _ptc[2];
+   ptc[3] = _ptc[3];
 }
 
-void collision::generateParticles(double * ptc, TClonesArray * particles)
+void collision::generateParticles(double *ptc, TClonesArray *particles, const uint8_t distType)
 {
    // generate multiplicity
-   TClonesArray &bunch = * particles;
-   uint16_t mult = _distMult->GetRandom();
+   TClonesArray &bunch = *particles;
+   uint16_t      mult  = 0;
+   switch (distType) {
+   case KINEMATIC: mult = _distMult->GetRandom(); break;
+   case FIXED: mult = 25; break;
+   case UNIFORM: mult = (uint16_t)(1 + 99 * gRandom->Rndm()); break;
+   case GAUSSIAN: mult = gRandom->Gaus(20, 10); break;
+   }
    _ptc[3] = mult;
    for (int i = 0; i < mult; i++) {
       particle part;
       getDir(part);
-      new(bunch[i])particle(part);
+      new (bunch[i]) particle(part);
    }
    ptc[0] = _ptc[0];
    ptc[1] = _ptc[1];
@@ -100,5 +107,5 @@ void collision::getDir(particle &dir)
    double phi   = 2. * TMath::ATan(TMath::Exp(-(_distEta->GetRandom())));
    dir.setTheta(theta);
    dir.setPhi(phi);
-   //particle in LAB
+   // particle in LAB
 }
