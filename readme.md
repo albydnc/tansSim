@@ -7,7 +7,7 @@ This program is a basic implementation of simulation and recontruction of partic
 The program simulates a detector made of a beampipe and two cylindrical layers.
 Collision vertexes are generated on a given probability distribution (Gaussian) and particles follow the pseudorapidity and angle distribution from a given kinematic file.
 
-#### Interaction with detector layers
+##### Interaction with detector layers
 The interaction with detectors is following a basic linear intesection.
 Gaussian smearing is applied to the points and multiple scattering can be enabled.
 It is also possible to generate a fixed number of random noise points.
@@ -16,10 +16,10 @@ Data is saved in `simulation.root` file.
 ### Reconstruction
 The recontruction part reads the events from the previous simulation file to reconstruct events' vertexes.
 
-#### Tracklet Algorithm
+##### Tracklet Algorithm
 A simple linear interpolation is done after a large angle filter. The results are then plotted and the mode value is returned.
 
-### Statistics generation
+##### Statistics generation
 The reconstruction process will print the resulting statistics, giving the user histograms on:
 + Vertex resolution distribution
 + Resolution vs Z-axis span
