@@ -36,17 +36,29 @@ Given a primary vertex and a particles' array, a basic linear interpolation is c
 Given a particles' array and a rms angle value, a rotation matrix is built with the particles coordinates then a scattering vector is computed via random generation of $\theta$ and $\phi$ values. The two are multiplied and the result are the new particle's coordinates, which replace the originals in the array.
 
 ### Reconstruction
-The recontruction part reads the events from the previous simulation file to reconstruct events' vertexes.
-
+The recontruction script reads the events from the previous simulation file to reconstruct events' vertexes. The reconstruction is taking care of *z* coordinate only, since 3D recontruction with this setup is not as precise and the standard deviation on x and y is small enough.
+#### Reconstruction procedure
+Hits and vertexes are read from the simulation file in a for loop to process every event. The size of the reconstruction can be selected when calling the method.\
+Histograms relating hits and multiplicity, hits and Z are filled. Those will be used to compute efficiency.\
+The method to reconstruct **z** is then called.
 ##### Tracklet Algorithm
-A simple linear interpolation is done after a large angle filter. The results are then plotted and the mode value is returned.
-
+By reading hits from the arrays, filtering by angle is applied to reduce the following computation.
+The remaining hits are then passed to the tracklet class and correlated by `findZVertex()` which uses a simple linear interpolation to return the **z**.\ Reconstructed **z** coordinates are added to a vector and filled in an histogram; then, from the histogram is extracted the mode value by getting the most frequent value via `findMax(TH1I &data, const double &tol)`; a multiple maximum rejection and average is also implemented.\
+The mode value extracted is then averaged with the nearest values by the `nearAvg()` method, which selects the values in a neighborhood of a specified width.
+The value returned by this method is the definitive reconstructed z.
 ##### Statistics generation
 The reconstruction process will print the resulting statistics, giving the user histograms on:
 + Vertex resolution distribution
-+ Resolution vs Z-axis span` multipleScattering(TClonesArray *particles, double rmsTh)`
++ Resolution vs Z-axis
++ Resolution vs Multiplicity
++ Efficiency vs Z-axis
 + Efficiency vs Multiplicity
-+ Efficiency vs Z-axis span
+
+To get vertex distribution, the deviation between the generated and the reconstructed coordinate is calculated.\
+To get resolution vs Z-axis, a TGraphErrors is built by extracting rms and rms error from the deviation histograms, which have been filled during the reconstruction. The same procedure is applied to the resolution vs multiplicity chart. \
+Efficiency charts are instead built by evaluating reconstructed vs generated vertexes, then a TGraphAsymmErrors is drawn.
+
+### Results
 
 ### Simulation and Reconstruction Performance
 **Testbench:**
@@ -56,13 +68,13 @@ The reconstruction process will print the resulting statistics, giving the user 
 + 16GB DDR4 RAM
 + 512GB NVMe SSD
 
-Simulation of 1M events takes 80 seconds on average.
+Simulation of 1M events takes 80 seconds on average.\
 Reconstruction of 1M events takes 40 seconds on average.
 
 Performance is greatly improved by using the C++ STL data classes over _TClonesArray_.
-Simulation of 1M events is around 10 seconds average. **8x faster**.
+Simulation of 1M events is around 10 seconds average. **8x faster**.\
 As for now (ROOT v6.19.0), _TTree_ does not support `std::vector<std::array<double,2>>` so the development is not further going on.
-I will keep track of ROOT new releases to see if it will be supported.
+I will keep track of ROOT new releases to see if it will be supported.\
 Post opened on the [ROOT forum](https://root-forum.cern.ch/t/adding-std-array-double-2-to-a-ttree-branch/37425).
 
 *Written by Alberto Perro - 2019*
