@@ -12,10 +12,8 @@
 #include <array>
 
 #ifdef __MAKECINT__
-#pragma link C++ class std::vector<double> +;
-#pragma link C++ class std::vector<std::vector<double>> +;
-//#pragma link C++ class std::array<double,2> +;
-//#pragma link C++ class std::vector<std::array<double, 2> > +;
+#pragma link C++ class std::array<double,2> +;
+#pragma link C++ class std::vector<std::array<double, 2> > +;
 #endif
 
 #define N_EVENTS 1e6
