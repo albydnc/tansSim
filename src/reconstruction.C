@@ -26,7 +26,7 @@ double findZ(TClonesArray *L1Hits, TClonesArray *L2Hits, const double &maxTheta,
 
 //------------------------RECONSTRUCTION METHOD -------------------------
 int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, const double minTol = 0.1,
-                   const double minDTheta = 0.01)
+                   const double minDTheta = 0.1)
 {
    // loading source file
    TFile *sourceFile = new TFile(fileName);
