@@ -60,6 +60,16 @@ Efficiency charts are instead built by evaluating reconstructed vs generated ver
 
 ### Results
 
+### How to run
++ open a terminal
++ run `git clone https://www.github.com/albydnc/tansSim` to clone the project
++ change directory by typing `cd ./tansSim`
++ open `root` in terminal
++ run `.L compile.cxx`
++ run `compile_simulation()`, it takes a while
++ to run the simulation, `simulation(true, 10)` where `true` is enabling multiple scattering and `10` is the number of random noise points per layer
++ when it is complete, to reconstruct run `recontruction("simulation.root",0,0.1,0.001)`, where arguments are filename, number of events to be processed, tolerance and minimum theta filter.
+
 ### Simulation and Reconstruction Performance
 **Testbench:**
 + Ubuntu 18.04.2 LTS
@@ -71,7 +81,7 @@ Efficiency charts are instead built by evaluating reconstructed vs generated ver
 Simulation of 1M events takes 80 seconds on average.\
 Reconstruction of 1M events takes 40 seconds on average.
 
-Performance is greatly improved by using the C++ STL data classes over _TClonesArray_.
+Performance is greatly improved by using the C++11 STL data classes over _TClonesArray_.
 Simulation of 1M events is around 10 seconds average. **8x faster**.\
 As for now (ROOT v6.19.0), _TTree_ does not support `std::vector<std::array<double,2>>` so the development is not further going on.
 I will keep track of ROOT new releases to see if it will be supported.\
