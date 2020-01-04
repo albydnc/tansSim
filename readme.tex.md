@@ -59,6 +59,35 @@ To get resolution vs Z-axis, a TGraphErrors is built by extracting rms and rms e
 Efficiency charts are instead built by evaluating reconstructed vs generated vertexes, then a TGraphAsymmErrors is drawn.
 
 ### Results
+Simulation and reconstruction parameters:
++ Multiple scattering enabled
++ 10 random noise hits
++ 1'000'000 of events generated and reconstructed
++ Z tolerance of 0.1 mm
++ $\theta$ tolerance of 0.1 rad
+
+As we can see from the histograms below, the algorithm reconstructed 670'083 events, resulting in a mean z deviation of -1.221 mm with a standard deviation of 8.945 mm.\
+The resolution is slightly influenced by the multiplicity, specifically when considering the error bars. In the Resolution vs Z graph is possible to see how the resolution errors are greatly reduced near z=0, while diverging at the ends.\
+Regarding the efficiency, with higher multiplicity the algorithm is more efficient as expected. In terms of Z, efficiency is best when near the center, while degrading at the ends.
+
+Histograms:
++ Total Resolution (distribution of deviation)
+![](img/cResAll.png)
+
++ Resolution vs Multiplicity
+![](img/cResVsMult.png)
+
++ Resolution vs Z
+![](img/cResVsZtrue.png)
+
++ Efficiency (Reconstructed/Total) vs Multiplicity
+![](img/cEffVsMult.png)
+
++ Efficiency (Reconstructed/Total in $\pm 1 \sigma$) vs Multiplicity
+![](img/cEffVsMult1S.png)
+
++ Efficiency (Reconstructed/Total) vs Z
+![](img/cEffVsZ.png)
 
 ### How to run
 + open a terminal
@@ -68,7 +97,7 @@ Efficiency charts are instead built by evaluating reconstructed vs generated ver
 + run `.L compile.cxx`
 + run `compile_simulation()`, it takes a while
 + to run the simulation, `simulation(true, 10)` where `true` is enabling multiple scattering and `10` is the number of random noise points per layer
-+ when it is complete, to reconstruct run `recontruction("simulation.root",0,0.1,0.001)`, where arguments are filename, number of events to be processed, tolerance and minimum theta filter.
++ when it is complete, to reconstruct run `recontruction("simulation.root",0,0.1,0.001)`, where arguments are filename, number of events to be processed, tolerance and minimum theta filter
 
 ### Simulation and Reconstruction Performance
 **Testbench:**
@@ -78,13 +107,13 @@ Efficiency charts are instead built by evaluating reconstructed vs generated ver
 + 16GB DDR4 RAM
 + 512GB NVMe SSD
 
-Simulation of 1M events takes 80 seconds on average.\
+With default settings, simulation of 1M events takes 90 seconds on average.\
 Reconstruction of 1M events takes 40 seconds on average.
 
 Performance is greatly improved by using the C++11 STL data classes over _TClonesArray_.
 Simulation of 1M events is around 10 seconds average. **8x faster**.\
 As for now (ROOT v6.19.0), _TTree_ does not support `std::vector<std::array<double,2>>` so the development is not further going on.
 I will keep track of ROOT new releases to see if it will be supported.\
-Post opened on the [ROOT forum](https://root-forum.cern.ch/t/adding-std-array-double-2-to-a-ttree-branch/37425).
+Post opened on the [ROOT forum](https://root-forum.cern.ch/t/adding-std-array-double-2-to-a-ttree-branch/37425) regarding this issue.
 
 *Written by Alberto Perro - 2019*

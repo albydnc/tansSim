@@ -33,7 +33,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    if (!sourceFile) return 1;
    // histogram and canvas declarations
    TCanvas *     cResAll = new TCanvas("cResAll", "Risoluzione", 10, 10, 1200, 800);
-   TH1I *        hResAll = new TH1I("hResAll", "Risoluzione inclusva", 200, -20, 20);
+   TH1I *        hResAll = new TH1I("hResAll", "Risoluzione inclusva;Z [mm];#eventi", 200, -20, 20);
    double        sigmaZ[13], ssigmaZ[13], xZ[13], sxZ[13];
    TCanvas *     cResVsZtrue = new TCanvas("cResVsZtrue", "Risoluzione vs Z", 10, 10, 1200, 800);
    TGraphErrors *hResVsZtrue;
@@ -124,7 +124,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    }
    cResVsZtrue->cd();
    hResVsZtrue = new TGraphErrors(13, xZ, sigmaZ, sxZ, ssigmaZ);
-   hResVsZtrue->SetTitle("Risoluzione vs Z;Z [cm];Risoluzione [cm]");
+   hResVsZtrue->SetTitle("Risoluzione vs Z;Z [mm];Risoluzione [mm]");
    hResVsZtrue->SetMinimum(0.1);
    hResVsZtrue->Draw();
 
@@ -134,7 +134,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    }
    cResVsMult->cd();
    hResVsMult = new TGraphErrors(13, xMult, sigmaMult, sxMult, ssigmaMult);
-   hResVsMult->SetTitle("Risoluzione vs Molteplicita';Molteplicita' ;Risoluzione [cm]");
+   hResVsMult->SetTitle("Risoluzione vs Molteplicita';Molteplicita' ;Risoluzione [mm]");
    hResVsMult->SetMinimum(0.1);
    hResVsMult->Draw();
    cResAll->cd();
