@@ -25,8 +25,8 @@ double nearAvg(const std::vector<double> &zRecon, const double &zTrend, const do
 double findZ(TClonesArray *L1Hits, TClonesArray *L2Hits, const double &maxTheta, const double &tol, bool debug);
 
 //------------------------RECONSTRUCTION METHOD -------------------------
-int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, const double minTol = 0.1,
-                   const double minDTheta = 0.1)
+int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, const double minTol = 2,
+                   const double minDTheta = 0.01)
 {
    // loading source file
    TFile *sourceFile = new TFile(fileName);
@@ -89,7 +89,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
       hHitVsZ->Fill(ptc[2]);                                       // hit al variare di z
       // reconstruct z
       double zRecon = findZ(hitsL1, hitsL2, minDTheta, minTol, false);
-      if (zRecon < -9999.) {
+      if (zRecon < -9000.) {
          notRecon++;
       } else {
          // calculate deviation
@@ -165,7 +165,7 @@ double findZ(TClonesArray *L1Hits, TClonesArray *L2Hits, const double &maxTheta,
    hit *               hitL1;
    hit *               hitL2;
    std::vector<double> zRecon;
-   TH1I                hFindTrend = TH1I("hFindTrend", "findTrend", 1200, -200, 200);
+   TH1I                hFindTrend = TH1I("hFindTrend", "findTrend", 80, -200, 200);
    // get hits from array
    while ((hitL1 = (hit *)l1iterator())) {
       while ((hitL2 = (hit *)l2iterator())) {
@@ -208,8 +208,7 @@ double findMax(TH1I &data, const double &tol)
 {
    int    binMax = data.GetMaximumBin();
    double zTrend = data.GetXaxis()->GetBinCenter(binMax);
-
-   data.GetXaxis()->SetRange(binMax + 1, 1200);
+   data.GetXaxis()->SetRange(binMax + 1, 80);
    int    binMax2 = data.GetMaximumBin();
    double zTrend2 = data.GetXaxis()->GetBinCenter(binMax2);
 

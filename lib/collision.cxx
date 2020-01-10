@@ -42,38 +42,12 @@ collision &collision::operator=(const collision &source)
    return *this;
 }
 
-void collision::generateVertex()
+void collision::generateCollision(const uint8_t distType)
 {
    // generate coordinates
    _ptc[0] = gRandom->Gaus(_mx, _sx);
    _ptc[1] = gRandom->Gaus(_my, _sy);
    _ptc[2] = gRandom->Gaus(_mz, _sz);
-}
-
-void collision::generateVertex(double *ptc)
-{
-   // generate coordinates
-   _ptc[0] = gRandom->Gaus(_mx, _sx);
-   _ptc[1] = gRandom->Gaus(_my, _sy);
-   _ptc[2] = gRandom->Gaus(_mz, _sz);
-   ptc[0]  = _ptc[0];
-   ptc[1]  = _ptc[1];
-   ptc[2]  = _ptc[2];
-}
-
-// getters
-void collision::getCoordinates(double *ptc)
-{
-   ptc[0] = _ptc[0];
-   ptc[1] = _ptc[1];
-   ptc[2] = _ptc[2];
-   ptc[3] = _ptc[3];
-}
-
-void collision::generateParticles(double *ptc, TClonesArray *particles, const uint8_t distType)
-{
-   // generate multiplicity
-   TClonesArray &bunch = *particles;
    uint16_t      mult  = 0;
    switch (distType) {
    case KINEMATIC: mult = _distMult->GetRandom(); break;
@@ -82,11 +56,11 @@ void collision::generateParticles(double *ptc, TClonesArray *particles, const ui
    case GAUSSIAN: mult = gRandom->Gaus(20, 10); break;
    }
    _ptc[3] = mult;
-   for (int i = 0; i < mult; i++) {
-      particle part;
-      getDir(part);
-      new (bunch[i]) particle(part);
-   }
+}
+
+// getters
+void collision::getCoordinates(double *ptc)
+{
    ptc[0] = _ptc[0];
    ptc[1] = _ptc[1];
    ptc[2] = _ptc[2];
@@ -101,11 +75,10 @@ void collision::ImportKinem(TString path)
    _distEta  = (TH1F *)_kinemFile->Get("heta");
 }
 
-void collision::getDir(particle &dir)
+void collision::getDir(particle *dir)
 {
-   double theta = 2. * TMath::Pi() * gRandom->Rndm();
-   double phi   = 2. * TMath::ATan(TMath::Exp(-(_distEta->GetRandom())));
-   dir.setTheta(theta);
-   dir.setPhi(phi);
-   // particle in LAB
+   double phi = 2. * TMath::Pi() * gRandom->Rndm();
+   double theta   = 2. * TMath::ATan(TMath::Exp(-(_distEta->GetRandom())));
+   dir->setTheta(theta);
+   dir->setPhi(phi);
 }

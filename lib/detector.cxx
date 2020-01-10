@@ -13,31 +13,14 @@
 ClassImp(detector)
 
    detector::detector()
-   : TObject()
+   : TObject(){}
+
+hit * detector::intersect(double * ptc, particle * part, double * new_pt, double width, double radius,
+                         double z_sm, double rho_sm, bool multScat, double rmsTh)
 {
-}
-
-detector::detector(const detector &source) : TObject(source) {}
-
-detector::~detector() {}
-
-detector &detector::operator=(const detector &source)
-{
-   this->~detector();
-   new (this) detector(source);
-   return *this;
-}
-
-void detector::intersect(double *ptc, TClonesArray *particles, TClonesArray *Hits, double width, double radius,
-                         double z_sm, double rho_sm, int randomNoise)
-{
-   uint16_t      success = 0;
-   TClonesArray &hits    = *Hits;
-   TIter         next(particles);
-   particle *    part;
-   while ((part = (particle *)next())) {
-      double theta = part->getTheta();
-      double phi   = part->getPhi();
+      uint16_t      success = 0;
+      double theta = part->getTheta(); //beam axis angle
+      double phi   = part->getPhi(); //anomaly
       if (theta > TMath::Pi()) theta = theta - TMath::Pi();
       double c1    = TMath::Sin(theta) * TMath::Cos(phi);
       double c2    = TMath::Sin(theta) * TMath::Sin(phi);
@@ -58,13 +41,17 @@ void detector::intersect(double *ptc, TClonesArray *particles, TClonesArray *Hit
       if (z <= width / 2. && z >= -width / 2) {
          double x = ptc[0] + c1 * t;
          double y = ptc[1] + c2 * t;
-         if (x > 0) {
+         if (x > 0 && y>0) {
             rho = TMath::ATan(y / x);
          } else if (x == 0) {
             rho = (y > 0 ? 1. : -1.) * TMath::Pi() / 2;
-         } else {
-            rho = (y > 0 ? 1. : -1.) * TMath::Pi() + TMath::ATan(y / x);
-         }
+          } else if (x > 0 && y < 0) {
+             rho = 2 * TMath::Pi() + TMath::ATan(y / x);
+           } else if (x < 0 && y > 0) {
+              rho = TMath::Pi() - TMath::ATan(y / x);
+            } else if (x < 0 && y < 0) {
+               rho = TMath::Pi() - TMath::ATan(y / x);
+            }
          rho_sm /= radius;
          double z_smear   = gRandom->Gaus(z, z_sm);
          double rho_smear = gRandom->Gaus(rho, rho_sm); // smearing
@@ -73,26 +60,23 @@ void detector::intersect(double *ptc, TClonesArray *particles, TClonesArray *Hit
          } else if (rho_smear > 2 * TMath::Pi()) {
             rho_smear = rho_smear - 2 * TMath::Pi();
          }
-         new (hits[success]) hit(rho_smear, z_smear);
-         // new(hits[success])hit(rho,z);
-         success++;
-      } else {
-         particles->Remove(part);
+         if(multScat) multipleScattering(part,rmsTh);
+         new_pt[0] = x;
+         new_pt[1] = y;
+         new_pt[2] = z;
+         return new hit(rho_smear, z_smear);
       }
-   }
-   if (randomNoise > 0) {
-      for (int i = 0; i < randomNoise; i++) {
-         double z   = width - (gRandom->Rndm() * width / 2);
-         double rho = 2 * TMath::Pi() * gRandom->Rndm();
-      }
-   }
+      return NULL;
 }
 
-void detector::multipleScattering(TClonesArray *particles, double rmsTh)
+hit * detector::randomHits(int width){
+        double z   = width - (gRandom->Rndm() * width / 2);
+        double rho = 2 * TMath::Pi() * gRandom->Rndm();
+        return new hit(rho, z);
+}
+
+void detector::multipleScattering(particle * part, double rmsTh)
 {
-   TIter     next(particles);
-   particle *part;
-   while ((part = (particle *)next())) {
       double theta = part->getTheta();
       double phi   = part->getPhi();
 
@@ -125,5 +109,4 @@ void detector::multipleScattering(TClonesArray *particles, double rmsTh)
 
       part->setTheta(TMath::ACos(res[2]));
       part->setPhi(TMath::ATan2(res[1], res[2]));
-   }
 }

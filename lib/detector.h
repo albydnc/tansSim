@@ -8,22 +8,17 @@
 #include "TFile.h"
 #include "TString.h"
 #include "TClonesArray.h"
-#include "TH1F.h"
-#include <vector>
-#include <array>
+#include "hit.h"
+#include "particle.h"
 
 class detector : public TObject {
 public:
-   detector();
-   detector(const detector &source);
-   virtual ~detector();
-   detector &operator=(const detector &source); // assignment operator
-
-   // intersecting layer of detector given parameters
-   void intersect(double *ptc, TClonesArray *particles, TClonesArray *Hits, double width, double radius, double z_sm,
-                  double rho_sm, int randomNoise);
-   // multiple scattering generator
-   void multipleScattering(TClonesArray *particles, double rmsTh);
+  detector();
+      // intersecting layer of detector given parameters
+  hit * intersect(double * ptc, particle * part, double * new_pt, double width, double radius,
+                               double z_sm, double rho_sm, bool multScat, double rmsTh);// multiple scattering generator
+  hit * randomHits(int width);
+  void multipleScattering(particle * part, double rmsTh);
 
    ClassDef(detector, 0)
 };
