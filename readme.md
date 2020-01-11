@@ -143,9 +143,34 @@ project
 ```
 **Libraries Description**:
 + *collision*: generate vertex, multiplicity and direction
+```
+ImportKinem(): import kinematic file
+getDir(): generate particle direction
+getCoordinates() get vertex coordinates and multiplicity
+generateCollision() generate vertex and multiplicity
+```
 + *detector*: intersect with detector layers, random noise and multiple scattering
+```
+intersect() intersect with detector layer
+randomHits() generate random hits
+multipleScattering() multiple scattering generator
+```
 + *hit*: hit coordinates, angle difference method
+```
+getTheta() get theta coordinate
+getZ() get z coordinate
+deltaTheta() difference between theta angles
+```
 + *particle*: particle direction, transport layer
+```
+getTheta()
+getPhi()
+setTheta()
+setPhi()
+```
 + *tracklet*: z-vertex finder
+```
+findZVertex() find z vertex by generating tracklets
+```
 
 *Written by Alberto Perro - 2019*
