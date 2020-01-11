@@ -56,10 +56,10 @@ int simulation(bool multScat = false, int randomNoise = 0)
          double beampt[3];  // hit coordinates in cartesian
          det->intersect(ptc, part, beampt, 1000., 8.0, 0, 0, multScat, 0.001);
          double l1pt[3];
-         hit *  l1hit = det->intersect(ptc, part, l1pt, 270., 40., 0, 0, multScat, 0.001);
+         hit *  l1hit = det->intersect(beampt, part, l1pt, 270., 40., 0, 0, multScat, 0.001);
          if (l1hit != NULL) L1HITS[L1++] = l1hit;
          double l2pt[3];
-         hit *  l2hit = det->intersect(ptc, part, l2pt, 270., 70., 0, 0, false, 0);
+         hit *  l2hit = det->intersect(l1pt, part, l2pt, 270., 70., 0, 0, false, 0);
          if (l2hit != NULL) L2HITS[L2++] = l2hit;
       }
       hitTree->Fill();
