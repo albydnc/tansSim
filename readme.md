@@ -60,15 +60,15 @@ Efficiency charts are instead built by evaluating reconstructed vs generated ver
 
 ### Results
 Simulation and reconstruction parameters:
-+ Multiple scattering enabled
-+ 10 random noise hits
++ Multiple scattering enabled with <img src="/tex/3f346f33801d9cb733fef466e6162f9e.svg?invert_in_darkmode&sanitize=true" align=middle width=117.34419014999999pt height=22.831056599999986pt/>
++ 0 random noise hits
 + 1'000'000 of events generated and reconstructed
-+ Z tolerance of 0.1 mm
-+ <img src="/tex/27e556cf3caa0673ac49a8f0de3c73ca.svg?invert_in_darkmode&sanitize=true" align=middle width=8.17352744999999pt height=22.831056599999986pt/> tolerance of 0.1 rad
++ Z tolerance of 1 mm
++ <img src="/tex/27e556cf3caa0673ac49a8f0de3c73ca.svg?invert_in_darkmode&sanitize=true" align=middle width=8.17352744999999pt height=22.831056599999986pt/> tolerance of 0.01 rad
 
-As we can see from the histograms below, the algorithm reconstructed 670'083 events, resulting in a mean z deviation of -1.221 mm with a standard deviation of 8.945 mm.\
-The resolution is slightly influenced by the multiplicity, specifically when considering the error bars. In the Resolution vs Z graph is possible to see how the resolution errors are greatly reduced near z=0, while diverging at the ends.\
-Regarding the efficiency, with higher multiplicity the algorithm is more efficient as expected. In terms of Z, efficiency is best when near the center, while degrading at the ends.
+The overall efficiency is of 86.7%.
+The resolution is influenced by the multiplicity following an exponential function. In the Resolution vs Z graph is possible to see how the resolution is greatly increased near z=0, while diverging at the ends.\
+Regarding the efficiency, with higher multiplicity the algorithm is more efficient as expected. In terms of Z, efficiency is best when near the center with a plateau of 0.9, while degrading at the ends.
 
 Histograms:
 + Total Resolution (distribution of deviation)
@@ -97,7 +97,7 @@ Histograms:
 + run `.L compile.cxx`
 + run `compile_simulation()`, it takes a while
 + to run the simulation, `simulation(true, 10)` where `true` is enabling multiple scattering and `10` is the number of random noise points per layer
-+ when it is complete, to reconstruct run `recontruction("simulation.root",0,0.1,0.001)`, where arguments are filename, number of events to be processed, tolerance and minimum theta filter
++ when it is complete, to reconstruct run `recontruction("simulation.root",0,1,0.001)`, where arguments are filename, number of events to be processed, tolerance and minimum theta filter
 
 ### Simulation and Reconstruction Performance
 **Testbench:**
@@ -107,13 +107,45 @@ Histograms:
 + 16GB DDR4 RAM
 + 512GB NVMe SSD
 
-With default settings, simulation of 1M events takes 90 seconds on average.\
-Reconstruction of 1M events takes 40 seconds on average.
+With default settings, simulation of 1M events takes 30 seconds on average.\
+Reconstruction of 1M events takes 10 seconds on average.
 
 Performance is greatly improved by using the C++11 STL data classes over _TClonesArray_.
 Simulation of 1M events is around 10 seconds average. **8x faster**.\
 As for now (ROOT v6.19.0), _TTree_ does not support `std::vector<std::array<double,2>>` so the development is not further going on.
 I will keep track of ROOT new releases to see if it will be supported.\
 Post opened on the [ROOT forum](https://root-forum.cern.ch/t/adding-std-array-double-2-to-a-ttree-branch/37425) regarding this issue.
+
+### Project Files Tree
+```
+project
++--- src
+     +--- simulation.C
+     +--- reconstruction.C
+     +--- simulation_std.C
++--- lib
+     +--- collision.h
+     +--- collision.cxx
+     +--- detector.h
+     +--- detector.cxx
+     +--- hit.h
+     +--- hit.cxx
+     +--- particle.h
+     +--- particle.cxx
+     +--- tracklet.h
+     +--- tracklet.cxx
++--- data
+     +--- kinem.root
++--- img
++--- tex
++- compile.cxx
++- compile_std.cxx
+```
+**Libraries Description**:
++ *collision*: generate vertex, multiplicity and direction
++ *detector*: intersect with detector layers, random noise and multiple scattering
++ *hit*: hit coordinates, angle difference method
++ *particle*: particle direction, transport layer
++ *tracklet*: z-vertex finder
 
 *Written by Alberto Perro - 2019*
