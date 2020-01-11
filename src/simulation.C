@@ -54,12 +54,12 @@ int simulation(bool multScat = false, int randomNoise = 0)
       for (uint8_t mult = 0; mult < ptc[3]; mult++) {
          vtx->getDir(part); // update the direction
          double beampt[3];  // hit coordinates in cartesian
-         det->intersect(ptc, part, beampt, 1000., 8.0, 0, 0, multScat, 0.001);
+         det->intersect(ptc, part, beampt, 1000., 8.0, 0.12, 0.03, multScat, 0.001);
          double l1pt[3];
-         hit *  l1hit = det->intersect(beampt, part, l1pt, 270., 40., 0, 0, multScat, 0.001);
+         hit *  l1hit = det->intersect(beampt, part, l1pt, 270., 40., 0.12, 0.03, multScat, 0.001);
          if (l1hit != NULL) L1HITS[L1++] = l1hit;
          double l2pt[3];
-         hit *  l2hit = det->intersect(l1pt, part, l2pt, 270., 70., 0, 0, false, 0);
+         hit *  l2hit = det->intersect(l1pt, part, l2pt, 270., 70., 0.12, 0.03, false, 0);
          if (l2hit != NULL) L2HITS[L2++] = l2hit;
       }
       hitTree->Fill();

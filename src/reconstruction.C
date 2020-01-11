@@ -114,7 +114,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
       }
       hitsL1->Clear("C");
       hitsL2->Clear("C");
-      // printf("\rReconstruction Progress: %u%%", (uint8_t)(e * 100 / toProcess + 1));
+      printf("\rReconstruction Progress: %u%%", (uint8_t)(e * 100 / toProcess + 1));
    }
    printf("\nNot reconstructed: %d\n", notRecon);
    printf("\nNot reconstructed 2: %d\n", nRec);
