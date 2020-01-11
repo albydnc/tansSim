@@ -44,7 +44,7 @@ double hit::deltaTheta(hit *hitL1, hit *hitL2)
    double th1 = hitL1->getTheta();
    double th2 = hitL2->getTheta();
 
-   double result = th1 - th1;
+   double result = th1 - th2;
    while (result > TMath::Pi()) result -= 2 * TMath::Pi();
    while (result <= -TMath::Pi()) result += 2 * TMath::Pi();
    return fabs(result);

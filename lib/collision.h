@@ -23,14 +23,11 @@ public:
    collision(const collision &source);
    virtual ~collision();
    collision &operator=(const collision &source); // assignment operator
-
-   void generateVertex();            // generates vertex coordinates
-   void generateVertex(double *ptc); // generates vertex coordinates with pointer
+   void generateCollision(const uint8_t distType); // generates vertex coordinates and multiplicity
    // getters
    void getCoordinates(double *ptc); // get generated vertex
-   void generateParticles(double *ptc, TClonesArray *particles,
-                          const uint8_t distType); // generate particles given a vertex and writing to particles array
-   // setters
+   void getDir(particle *dir);    // particle direction generator
+  // setters
    void ImportKinem(TString path); // import kinematic file
    ClassDef(collision, 1)
 
@@ -48,8 +45,6 @@ private:
    TH1F * _distMult;
    TH1F * _distEta;
    TFile *_kinemFile;
-   // particle direction generator
-   void getDir(particle &dir);
 };
 
 #endif

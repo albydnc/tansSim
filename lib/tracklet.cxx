@@ -30,7 +30,7 @@ tracklet &tracklet::operator=(const tracklet &source)
 double tracklet::findZVertex()
 {
    // r = a*z + b
-   Double_t a = (_l2R - _l1R) / (_L2.getZ() - _L1.getZ()); // a=(r2-r1)/(z2-z1)
-   Double_t b = _l2R - a * _L2.getZ();                     // b = r2 - a*z2
-   return -b / a;                                          // r==0 --> z = -b/a
+   double a = (_l2R - _l1R) / (_L2.getZ() - _L1.getZ()); // a=(r2-r1)/(z2-z1)
+   double b = _l2R - a * _L2.getZ();                     // b = r2 - a*z2
+   return -b / a;                                        // r==0 --> z = -b/a
 }

@@ -14,8 +14,8 @@ public:
    tracklet(const hit *const phitL1, const hit *const phitL2, const double l1rad, const double l2rad);
    virtual ~tracklet();
    tracklet &operator=(const tracklet &source); // assignment operator
-   //vertex finder
-   double    findZVertex();
+   // vertex finder
+   double findZVertex();
    ClassDef(tracklet, 1)
 private:
    hit _L1, _L2;
