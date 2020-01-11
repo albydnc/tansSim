@@ -47,6 +47,5 @@ double hit::deltaTheta(hit *hitL1, hit *hitL2)
    double result = th1 - th2;
    while (result > TMath::Pi()) result -= 2 * TMath::Pi();
    while (result <= -TMath::Pi()) result += 2 * TMath::Pi();
-   //printf("dth: %f",result);
    return fabs(result);
 }

@@ -34,8 +34,8 @@ int simulation(bool multScat = false, int randomNoise = 0)
    collision *vtx = new collision();
    double     ptc[4]; // vertex coordinates array
    // instantiating TClonesArrays to store hits
-   TClonesArray *hitsL1    = new TClonesArray("hit", 100);
-   TClonesArray *hitsL2    = new TClonesArray("hit", 100);
+   TClonesArray *hitsL1 = new TClonesArray("hit", 100);
+   TClonesArray *hitsL2 = new TClonesArray("hit", 100);
    TClonesArray &L1HITS = *hitsL1;
    TClonesArray &L2HITS = *hitsL2;
    // referring tree branches to arrays
@@ -49,22 +49,23 @@ int simulation(bool multScat = false, int randomNoise = 0)
       vtx->getCoordinates(ptc);
       if (debug > 2) printf("\rx: %f\t y: %f\t z: %f\t m: %f", ptc[0], ptc[1], ptc[2], ptc[3]);
       // generating particles with a given multiplicity distribution
-      particle * part = new particle(); //direction holder
-      uint8_t L1=0, L2=0; //number of hits
-      for(uint8_t mult = 0; mult < ptc[3]; mult++){
-        vtx->getDir(part);
-        double beampt[3]; //hit coordinates in cartesian
-        det->intersect(ptc,part,beampt,1000.,8.0,0,0,multScat,0.001);
-        double l1pt[3];
-        hit * l1hit = det->intersect(beampt,part,l1pt,270.,40.,0,0,multScat,0.001);
-        if(l1hit != NULL) L1HITS[L1++] = l1hit;
-        double l2pt[3];
-        hit * l2hit = det->intersect(l1pt,part,l2pt,270.,70.,0,0,false,0);
-        if(l2hit != NULL) L2HITS[L2++] = l2hit;
+      particle *part = new particle(); // direction holder
+      uint8_t   L1 = 0, L2 = 0;        // number of hits
+      for (uint8_t mult = 0; mult < ptc[3]; mult++) {
+         vtx->getDir(part); // update the direction
+         double beampt[3];  // hit coordinates in cartesian
+         det->intersect(ptc, part, beampt, 1000., 8.0, 0, 0, multScat, 0.001);
+         double l1pt[3];
+         hit *  l1hit = det->intersect(ptc, part, l1pt, 270., 40., 0, 0, multScat, 0.001);
+         if (l1hit != NULL) L1HITS[L1++] = l1hit;
+         double l2pt[3];
+         hit *  l2hit = det->intersect(ptc, part, l2pt, 270., 70., 0, 0, false, 0);
+         if (l2hit != NULL) L2HITS[L2++] = l2hit;
       }
       hitTree->Fill();
       hitsL1->Clear();
       hitsL2->Clear();
+      // printf("\rL1 hits: %2d\t L2 hits: %2d",L1,L2);
       printf("\rSimulation Progress: %u%%", (uint8_t)(i * 100 / N_EVENTS + 1));
    }
    if (debug > 0) printf("\nmontecarlo finished\n");

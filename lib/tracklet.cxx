@@ -32,5 +32,5 @@ double tracklet::findZVertex()
    // r = a*z + b
    double a = (_l2R - _l1R) / (_L2.getZ() - _L1.getZ()); // a=(r2-r1)/(z2-z1)
    double b = _l2R - a * _L2.getZ();                     // b = r2 - a*z2
-   return -b / a;                                          // r==0 --> z = -b/a
+   return -b / a;                                        // r==0 --> z = -b/a
 }

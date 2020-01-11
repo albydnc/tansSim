@@ -45,14 +45,14 @@ collision &collision::operator=(const collision &source)
 void collision::generateCollision(const uint8_t distType)
 {
    // generate coordinates
-   _ptc[0] = gRandom->Gaus(_mx, _sx);
-   _ptc[1] = gRandom->Gaus(_my, _sy);
-   _ptc[2] = gRandom->Gaus(_mz, _sz);
-   uint16_t      mult  = 0;
+   _ptc[0]       = gRandom->Gaus(_mx, _sx);
+   _ptc[1]       = gRandom->Gaus(_my, _sy);
+   _ptc[2]       = gRandom->Gaus(_mz, _sz);
+   uint16_t mult = 0;
    switch (distType) {
    case KINEMATIC: mult = _distMult->GetRandom(); break;
    case FIXED: mult = 25; break;
-   case UNIFORM: mult = (uint16_t)(1 + 99 * gRandom->Rndm()); break;
+   case UNIFORM: mult = (uint16_t)(1 + 49 * gRandom->Rndm()); break;
    case GAUSSIAN: mult = gRandom->Gaus(20, 10); break;
    }
    _ptc[3] = mult;
@@ -77,8 +77,8 @@ void collision::ImportKinem(TString path)
 
 void collision::getDir(particle *dir)
 {
-   double phi = 2. * TMath::Pi() * gRandom->Rndm();
-   double theta   = 2. * TMath::ATan(TMath::Exp(-(_distEta->GetRandom())));
+   double phi   = 2. * TMath::Pi() * gRandom->Rndm();
+   double theta = 2. * TMath::ATan(TMath::Exp(-(_distEta->GetRandom())));
    dir->setTheta(theta);
    dir->setPhi(phi);
 }

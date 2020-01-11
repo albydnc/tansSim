@@ -13,12 +13,12 @@
 
 class detector : public TObject {
 public:
-  detector();
-      // intersecting layer of detector given parameters
-  hit * intersect(double * ptc, particle * part, double * new_pt, double width, double radius,
-                               double z_sm, double rho_sm, bool multScat, double rmsTh);// multiple scattering generator
-  hit * randomHits(int width);
-  void multipleScattering(particle * part, double rmsTh);
+   detector();
+   // intersecting layer of detector given parameters
+   hit *intersect(double *ptc, particle *part, double *new_pt, double width, double radius, double z_sm, double rho_sm,
+                  bool multScat, double rmsTh); // multiple scattering generator
+   hit *randomHits(int width);
+   void multipleScattering(particle *part, double rmsTh);
 
    ClassDef(detector, 0)
 };
