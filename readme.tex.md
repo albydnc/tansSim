@@ -102,9 +102,9 @@ Histograms:
 
 ### Simulation and Reconstruction Performance
 **Testbench:**
-+ Ubuntu 18.04.2 LTS
-+ ROOT v6.19.0
-+ Intel i7-6700HQ Laptop CPU
++ Ubuntu 20.04.1 LTS with 5.7.1 generic kernel
++ ROOT v6.23/01
++ Intel i7-8750H Laptop CPU
 + 16GB DDR4 RAM
 + 512GB NVMe SSD
 
@@ -113,7 +113,7 @@ Reconstruction of 1M events takes 10 seconds on average.
 
 Performance is greatly improved by using the C++11 STL data classes over _TClonesArray_.
 Simulation of 1M events is around 10 seconds average. **8x faster**.\
-As for now (ROOT v6.19.0), _TTree_ does not support `std::vector<std::array<double,2>>` so the development is not further going on.
+As for now (ROOT v6.23/01), _TTree_ does not support `std::vector<std::array<double,2>>` so the development is not further going on.
 I will keep track of ROOT new releases to see if it will be supported.\
 Post opened on the [ROOT forum](https://root-forum.cern.ch/t/adding-std-array-double-2-to-a-ttree-branch/37425) regarding this issue.
 
