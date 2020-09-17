@@ -55,7 +55,7 @@ int simulation(bool multScat = false, int randomNoise = 0)
       for (uint8_t mult = 0; mult < ptc[3]; mult++) {
          vtx->getDir(part); // update the direction
          double beampt[3];  // hit coordinates in cartesian
-         det->intersect(ptc, part, beampt, 1000., 8.0, 0.12, 0.03, multScat, 0.008);
+         det->intersect(ptc, part, beampt, 1000., 30.0, 0, 0, multScat, 0.008);
          double l1pt[3];
          hit *  l1hit = det->intersect(beampt, part, l1pt, 270., 40., 0.012, 0.003, multScat, 0.008);
          if (l1hit != NULL) {
@@ -70,6 +70,7 @@ int simulation(bool multScat = false, int randomNoise = 0)
          //printf("%f,%f  %f,%f,%f\n",l2hit->getTheta(), TMath::ATan(beampt[1] / beampt[0]), (beampt[1] / beampt[0]), (l1pt[1] / l1pt[0]), l2pt[1] / l2pt[0]);
          }
       }
+      delete part;
       hitTree->Fill();
       hitsL1->Clear();
       hitsL2->Clear();

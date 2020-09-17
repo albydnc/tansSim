@@ -45,18 +45,18 @@ hit *detector::intersect(double *ptc, particle *part, double *new_pt, double wid
       double y = ptc[1] + c2 * t;
 
       if (x > 0 && y > 0) {
-         rho = TMath::ATan(y / x);
+         rho = TMath::ATan(y / x); //ok
       } else if (x == 0) {
          rho = (y > 0 ? 1. : -1.) * TMath::Pi() / 2;
       } else if (x > 0 && y < 0) {
          rho = 2 * TMath::Pi() + TMath::ATan(y / x);
       } else if (x < 0 && y > 0) {
-         rho = TMath::Pi() - TMath::ATan(y / x);
+         rho = TMath::Pi() + TMath::ATan(y / x);
       } else if (x < 0 && y < 0) {
-         rho = TMath::Pi() - TMath::ATan(y / x);
+         rho = TMath::Pi() + TMath::ATan(y / x);
       }
 
-      rho_sm /= radius;
+      rho_sm /= radius; // normalize smearing
       double z_smear   = gRandom->Gaus(z, z_sm);     // smearing z
       double rho_smear = gRandom->Gaus(rho, rho_sm); // smearing polar angle
       if (rho_smear < 0) {
