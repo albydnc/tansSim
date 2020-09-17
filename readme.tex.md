@@ -61,7 +61,7 @@ Efficiency charts are instead built by evaluating reconstructed vs generated ver
 
 ### Results
 Simulation and reconstruction parameters:
-+ Multiple scattering enabled with $\theta_{rms}=0.001 rad$
++ Multiple scattering enabled with $\theta_{rms}=0.008 rad$
 + 0 random noise hits
 + 1'000'000 of events generated and reconstructed
 + Z tolerance of 1 mm
@@ -70,6 +70,27 @@ Simulation and reconstruction parameters:
 The overall efficiency is 86.7%.
 The resolution is influenced by the multiplicity following an exponential function. In the Resolution vs Z graph is possible to see how the resolution is greatly increased near z=0, while diverging at the ends.\
 Regarding the efficiency, with higher multiplicity the algorithm is more efficient as expected. In terms of Z, efficiency is best when near the center with a plateau of 0.9, while degrading at the ends.
+
+Histograms:
++ Total Resolution (distribution of deviation)
+![](img/MR.png)
+
++ Resolution vs Multiplicity
+![](img/MRM.png)
+
++ Resolution vs Z
+![](img/MRZ.png)
+
++ Efficiency (Reconstructed/Total) vs Multiplicity
+![](img/MEM.png)
+
++ Efficiency (Reconstructed/Total in $\pm 1 \sigma$) vs Multiplicity
+![](img/MEM1S.png)
+
++ Efficiency (Reconstructed/Total) vs Z
+![](img/MEZ.png)
+
+#### With multiple scattering disabled:
 
 Histograms:
 + Total Resolution (distribution of deviation)
