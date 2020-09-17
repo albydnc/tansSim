@@ -30,12 +30,12 @@ hit *detector::intersect(double *ptc, particle *part, double *new_pt, double wid
    double a     = ptc[0] * c1 + ptc[1] * c2;
    double b     = c1 * c1 + c2 * c2;
    double c     = ptc[0] * ptc[0] + ptc[1] * ptc[1] - radius * radius;
-   double delta = a * a - b * c;
+   double delta = a * a - (b * c);
    double t;
    double t_temp = -((ptc[0] * c1 + ptc[1] * c2) + TMath::Sqrt(delta)) / b;
-   if (t_temp > 0){
+   if (t_temp > 0) {
       t = t_temp;
-   }else {
+   } else {
       t = -((ptc[0] * c1 + ptc[1] * c2) - TMath::Sqrt(delta)) / b;
    }
    double z = ptc[2] + c3 * t;
@@ -57,7 +57,7 @@ hit *detector::intersect(double *ptc, particle *part, double *new_pt, double wid
       }
 
       rho_sm /= radius;
-      double z_smear   = gRandom->Gaus(z, z_sm); // smearing z
+      double z_smear   = gRandom->Gaus(z, z_sm);     // smearing z
       double rho_smear = gRandom->Gaus(rho, rho_sm); // smearing polar angle
       if (rho_smear < 0) {
          rho_smear = rho_smear + 2 * TMath::Pi();
@@ -89,11 +89,11 @@ void detector::multipleScattering(particle *part, double rmsTh)
    double dPhi = 2 * TMath::Pi() * gRandom->Rndm();
    if (theta > TMath::Pi()) theta = theta - TMath::Pi();
    double rotMatx[3][3];
-   rotMatx[0][0] = TMath::Sin(phi);
+   rotMatx[0][0] = -1*TMath::Sin(phi);
    rotMatx[1][0] = TMath::Cos(phi);
    rotMatx[2][0] = 0.;
-   rotMatx[0][1] = TMath::Cos(theta) * TMath::Cos(phi);
-   rotMatx[1][1] = TMath::Cos(theta) * TMath::Sin(phi);
+   rotMatx[0][1] = -1* TMath::Cos(theta) * TMath::Cos(phi);
+   rotMatx[1][1] = -1* TMath::Cos(theta) * TMath::Sin(phi);
    rotMatx[2][1] = TMath::Sin(theta);
    rotMatx[0][2] = TMath::Sin(theta) * TMath::Cos(phi);
    rotMatx[1][2] = TMath::Sin(theta) * TMath::Sin(phi);
@@ -113,5 +113,5 @@ void detector::multipleScattering(particle *part, double rmsTh)
    }
 
    part->setTheta(TMath::ACos(res[2]));
-   part->setPhi(TMath::ATan2(res[1], res[2]));
+   part->setPhi(TMath::ATan2(res[1], res[0]));
 }

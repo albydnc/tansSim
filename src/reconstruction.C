@@ -67,7 +67,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    TGraphAsymmErrors *hEffVsZ;
    TH1I *             hHitVsZ      = new TH1I("hHitVsZ", "Totali;Z;# eventi", 13, -195, 195);
    TH1I *             hHitReconVsZ = new TH1I("hHitReconVsZ", "Ricostruiti;Z;# eventi", 13, -195, 195);
-   // getting simulation data from TTRee
+   // getting simulation data from TTree
    TTree *tree = (TTree *)(sourceFile->Get("hits"));
    if (!tree) return 2;
    TClonesArray *hitsL1 = new TClonesArray("hit", 100);
@@ -84,6 +84,7 @@ int reconstruction(TString fileName = "simulation.root", uint32_t nevents = 0, c
    printf("Starting reconstruction on %u events.\n", toProcess);
    //------------------------Reconstruction Algorithm
    for (uint32_t e = 0; e < toProcess; e++) {
+      //read event
       tree->GetEvent(e);
       hHitVsMult->Fill(ptc[3]);                                    // hit vs molteplicita
       if (ptc[2] < 53 && ptc[2] > -53) hHitVsMult1S->Fill(ptc[3]); // hit sotto 1 sigma di Z

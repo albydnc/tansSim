@@ -11,7 +11,7 @@
 #include "TStopwatch.h"
 #include "TFile.h"
 #include "TTree.h"
-
+#include "TMath.h"
 #include "lib/detector.h"
 #include "lib/collision.h"
 #include "lib/hit.h"
@@ -22,6 +22,7 @@
 
 int simulation(bool multScat = false, int randomNoise = 0)
 {
+   if(multScat)printf("MULTIPLE SCATTERING ENABLED!\n");
    int        debug = 1;
    TStopwatch watch;
    // creating TTree for simulation
@@ -54,24 +55,33 @@ int simulation(bool multScat = false, int randomNoise = 0)
       for (uint8_t mult = 0; mult < ptc[3]; mult++) {
          vtx->getDir(part); // update the direction
          double beampt[3];  // hit coordinates in cartesian
-         det->intersect(ptc, part, beampt, 1000., 8.0, 0.12, 0.03, multScat, 0.001);
+         det->intersect(ptc, part, beampt, 1000., 8.0, 0.12, 0.03, multScat, 0.008);
          double l1pt[3];
-         hit *  l1hit = det->intersect(beampt, part, l1pt, 270., 40., 0.12, 0.03, multScat, 0.001);
-         if (l1hit != NULL) L1HITS[L1++] = l1hit;
+         hit *  l1hit = det->intersect(beampt, part, l1pt, 270., 40., 0.012, 0.003, multScat, 0.008);
+         if (l1hit != NULL) {
+            L1HITS[L1++] = l1hit;
+         }
          double l2pt[3];
-         hit *  l2hit = det->intersect(l1pt, part, l2pt, 270., 70., 0.12, 0.03, false, 0);
-         if (l2hit != NULL) L2HITS[L2++] = l2hit;
+         hit *  l2hit = det->intersect(l1pt, part, l2pt, 270., 70., 0.012, 0.003, false, 0);
+         if (l2hit != NULL) {
+            L2HITS[L2++] = l2hit;
+         }
+         if (l2hit != NULL) {
+         //printf("%f,%f  %f,%f,%f\n",l2hit->getTheta(), TMath::ATan(beampt[1] / beampt[0]), (beampt[1] / beampt[0]), (l1pt[1] / l1pt[0]), l2pt[1] / l2pt[0]);
+         }
       }
       hitTree->Fill();
       hitsL1->Clear();
       hitsL2->Clear();
-      // printf("\rL1 hits: %2d\t L2 hits: %2d",L1,L2);
+      //printf("\nL1 hits: %2d\t L2 hits: %2d\n", L1, L2);
       printf("\rSimulation Progress: %u%%", (uint8_t)(i * 100 / N_EVENTS + 1));
    }
    if (debug > 0) printf("\nmontecarlo finished\n");
    // saving simulation file
    simulation->Write("", TObject::kOverwrite);
    simulation->Close();
+   hitsL1->Delete();
+   hitsL2->Delete();
    delete vtx;
    delete det;
    if (debug > 0) printf("simulation run succesful, cpu time: %.2f s\n", watch.CpuTime());
